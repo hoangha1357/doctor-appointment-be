@@ -40,18 +40,22 @@ class HomeController {
         User.findOne({username: req.body.username})
             .then((user)=>{
                 if(user){
-                    if(bcrypt.compare(user.password,req.body.password)){
-                        res.json({
-                            message: "Success",
-                            data: {
-                                user: user
-                            }
-                        });
-                    }else{
-                        res.json({
-                            message: "Fail",
-                        });
-                    }  
+                    bcrypt.compare(req.body.password,user.password)
+                        .then(result=>{
+                            if(result){
+                                console.log(user.password);
+                                res.json({
+                                    message: "Success",
+                                    data: {
+                                        user: user
+                                    }
+                                });
+                            }else{
+                                res.json({
+                                    message: "Fail",
+                                });
+                            }  
+                        })
                 }else{
                     res.json({
                         message: "Fail",
