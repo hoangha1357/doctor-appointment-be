@@ -1,51 +1,64 @@
 const User = require('../models/User');
-
+const bcrypt     = require('bcrypt');
+const jwt       = require('jsonwebtoken');
 class HomeController {
 
-    async register(req,res,next) {
+    register(req,res,next) {
         const { name, username, password, type, pnum, email, address, birthDate } = req.body;
-        try{
-            const newUser = await User.create({
-                name: name,
-                username: username,
-                password: password,
-                type: type,
-                pnum: pnum,
-                email: email,
-                address: address,
-                birthDate: Date(birthDate)
+        User.findOne({username: username})
+            .then(user => {
+                if(user){
+                    res.send("User exist");
+                }else{
+                    const newUser = new User({
+                        name: name,
+                        username: username,
+                        password: password,
+                        type: type,
+                        pnum: pnum,
+                        email: email,
+                        address: address,
+                        birthDate: Date(birthDate)
+                    })
+                    newUser.save()
+                     .then(() =>{
+                        res.status(201).json({
+                            success: true,
+                            data: {
+                                user: newUser
+                            }
+                        })
+                     })
+                     console.log(newUser);
+                }
             })
-            newUser.save()
-             .then(() =>{
-                res.status(201).json({
-                    success: true,
-                    data: {
-                        user: newUser
-                    }
-                })
-             })
-             console.log(newUser);
-        }catch{
-            return next;
-        }
-        
-        
+             
     }
 
     login(req, res, next) {
-        User.find({name: req.body.username})
+        console.log(req.body);
+        User.findOne({username: req.body.username})
             .then((user)=>{
-                if(user.username == req.body.username){
-                    if(user.password === req.body.password){
-                        res.send("success");
+                if(user){
+                    if(bcrypt.compare(user.password,req.body.password)){
+                        res.json({
+                            message: "Success",
+                            data: {
+                                user: user
+                            }
+                        });
                     }else{
-                        res.send("invalid user");
+                        res.json({
+                            message: "Fail",
+                        });
                     }  
                 }else{
-                    res.send("invalid user");
+                    res.json({
+                        message: "Fail",
+                    });
                 }
             })
-        next();
+            .catch(err=>console.log(err));
     }
 
     getUsers(req, res, next) {
