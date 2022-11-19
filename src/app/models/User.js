@@ -14,4 +14,13 @@ const User = new Schema(
     }
 );
 
+User.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        return next();
+    }
+    // hash the password with bcrypt
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+});
+
 module.exports = mongoose.model('User', User);
