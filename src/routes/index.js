@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const HomeController = require('../app/controllers/homeController')
+const HomeController = require('../app/controllers/homeController');
+const UserController = require('../app/controllers/userController');
 
 router.get('/', HomeController.getUsers);
 router.post('/resgister', HomeController.register);
 router.post('/login', HomeController.login);
-
+router.get('/user',UserController.getUsers);
+router.get('/user/:id',UserController.getUserById);
+router.post('/user/:id/update', UserController.updateUser)
 module.exports = router;
