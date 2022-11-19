@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const bcryt     = require('bcrypt');
+const bcrypt     = require('bcrypt');
 const jwt       = require('jsonwebtoken');
 class HomeController {
 
@@ -10,7 +10,7 @@ class HomeController {
                 if(user){
                     res.send("User exist");
                 }else{
-                    const newUser = User.create({
+                    const newUser = new User({
                         name: name,
                         username: username,
                         password: password,
@@ -36,19 +36,29 @@ class HomeController {
     }
 
     login(req, res, next) {
-        User.find({name: req.body.username})
+        console.log(req.body);
+        User.findOne({username: req.body.username})
             .then((user)=>{
-                if(user.username == req.body.username){
-                    if(user.password === req.body.password){
-                        res.send("success");
+                if(user){
+                    if(bcrypt.compare(user.password,req.body.password)){
+                        res.json({
+                            message: "Success",
+                            data: {
+                                user: user
+                            }
+                        });
                     }else{
-                        res.send("invalid user");
+                        res.json({
+                            message: "Fail",
+                        });
                     }  
                 }else{
-                    res.send("invalid user");
+                    res.json({
+                        message: "Fail",
+                    });
                 }
             })
-        next();
+            .catch(err=>console.log(err));
     }
 
     getUsers(req, res, next) {
