@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Doctor = require('../app/models/Doctor');
+const HomeController = require('../app/controllers/homeController')
 
-router.get('/', function(req, res) {
-    Doctor.find({}).lean()
-        .then((doctors)=>{
-            res.json(doctors);
-        })
-})
+router.get('/', HomeController.getUsers);
+router.post('/resgister', HomeController.register);
+router.post('/login', HomeController.login);
 
 module.exports = router;
