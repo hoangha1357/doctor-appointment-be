@@ -1,35 +1,38 @@
 const User = require('../models/User');
-
+const bcryt     = require('bcrypt');
+const jwt       = require('jsonwebtoken');
 class HomeController {
 
-    async register(req,res,next) {
+    register(req,res,next) {
         const { name, username, password, type, pnum, email, address, birthDate } = req.body;
-        try{
-            const newUser = await User.create({
-                name: name,
-                username: username,
-                password: password,
-                type: type,
-                pnum: pnum,
-                email: email,
-                address: address,
-                birthDate: Date(birthDate)
+        User.findOne({username: username})
+            .then(user => {
+                if(user){
+                    res.send("User exist");
+                }else{
+                    const newUser = User.create({
+                        name: name,
+                        username: username,
+                        password: password,
+                        type: type,
+                        pnum: pnum,
+                        email: email,
+                        address: address,
+                        birthDate: Date(birthDate)
+                    })
+                    newUser.save()
+                     .then(() =>{
+                        res.status(201).json({
+                            success: true,
+                            data: {
+                                user: newUser
+                            }
+                        })
+                     })
+                     console.log(newUser);
+                }
             })
-            newUser.save()
-             .then(() =>{
-                res.status(201).json({
-                    success: true,
-                    data: {
-                        user: newUser
-                    }
-                })
-             })
-             console.log(newUser);
-        }catch{
-            return next;
-        }
-        
-        
+             
     }
 
     login(req, res, next) {
