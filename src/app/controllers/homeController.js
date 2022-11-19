@@ -4,23 +4,30 @@ class HomeController {
 
     async register(req,res,next) {
         const { name, username, password, type, pnum, email, address, birthDate } = req.body;
-        const newUser = await User.create({
-            name: name,
-            username: username,
-            password: password,
-            type: type,
-            pnum: pnum,
-            email: email,
-            address: address,
-            birthDate: birthDate
-        })
-
-        res.status(201).json({
-            success: true,
-            data: {
-                user: newUser
-            }
-        })
+        try{
+            const newUser = await User.create({
+                name: name,
+                username: username,
+                password: password,
+                type: type,
+                pnum: pnum,
+                email: email,
+                address: address,
+                birthDate: birthDate
+            })
+    
+            User.save()
+                .then(() => {
+                    res.status(201).json({
+                        success: true,
+                        data: {
+                            user: newUser
+                        }
+                    })
+                })
+        } catch{
+            return next();
+        }
     }
 
     login(req, res, next) {
