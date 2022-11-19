@@ -2,9 +2,34 @@ const User = require('../models/User');
 
 class HomeController {
 
-    register(req,res,next) {
-        const newUser = new User(...req.body);
-        newUser.save();
+    async register(req,res,next) {
+        const { name, username, password, type, pnum, email, address, birthDate } = req.body;
+        try{
+            const newUser = await User.create({
+                name: name,
+                username: username,
+                password: password,
+                type: type,
+                pnum: pnum,
+                email: email,
+                address: address,
+                birthDate: Date(birthDate)
+            })
+            newUser.save()
+             .then(() =>{
+                res.status(201).json({
+                    success: true,
+                    data: {
+                        user: newUser
+                    }
+                })
+             })
+             console.log(newUser);
+        }catch{
+            return next;
+        }
+        
+        
     }
 
     login(req, res, next) {
