@@ -3,11 +3,10 @@ const User = require('../models/User');
 class UserController {
 
     getUsers(req, res, next) {
-        // User.find({}).lean()
-        //     .then((users)=>{
-        //         res.json(users);
-        //     })
-        res.send("not thing");
+        User.find({}).lean()
+            .then((users)=>{
+                res.json(users);
+            })
     }
 
     getUserById(req, res, next) {
