@@ -23,5 +23,16 @@ User.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 12);
     next();
 });
+User.methods.checkPassword = async function (providedPassword) {
+    return await bcrypt.compare(providedPassword, this.password);
+};
+
+User.methods.genResetPasswordToken = function () {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.resetPasswordToken = resetToken;
+    this.resetPasswordExpires = Date.now() + 3600000; // 15 minutes
+
+    return resetToken;
+};
 
 module.exports = mongoose.model('User', User);
