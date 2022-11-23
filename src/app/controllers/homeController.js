@@ -4,14 +4,15 @@ const jwt       = require('jsonwebtoken');
 class HomeController {
 
     register(req,res,next) {
+        console.log(req.body);
         const { name, username, password, type, pnum, email, address, birthDate } = req.body;
-        if( !username || !password || username.length > 30 || password.length > 30){
-            res.send("Ivalid info")
+        if( !username || !password || username.length > 30 || password.length > 30 || !type){
+            res.json({message:"Ivalid info"})
         }else{
             User.findOne({username: username})
                 .then(user => {
                     if(user){
-                        res.send("User exist");
+                        res.json({message:"User exist"});
                     }else{
                         const newUser = new User({
                             name: name,
@@ -64,13 +65,6 @@ class HomeController {
                 }
             })
             .catch(err=>console.log(err));
-    }
-
-    getUsers(req, res, next) {
-        User.find({}).lean()
-            .then((users)=>{
-                res.json(users);
-            })
     }
 }
 
