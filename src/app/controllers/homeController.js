@@ -1,10 +1,11 @@
 const User = require('../models/User');
 const bcrypt     = require('bcrypt');
 const jwt       = require('jsonwebtoken');
+const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../../utils/jwtToken')
+const createError = require('http-errors');
 class HomeController {
 
-    register(req,res,next) {
-        console.log(req.body);
+    register = (req,res,next) => {
         const { name, username, password, type, pnum, email, address, birthDate } = req.body;
         if( !username || !password || username.length > 30 || password.length > 30 || !type){
             res.json({message:"Ivalid info"})
@@ -39,32 +40,29 @@ class HomeController {
              
     }
 
-    login(req, res, next) {
-        User.findOne({username: req.body.username})
-            .then((user)=>{
-                if(user){
-                    bcrypt.compare(req.body.password,user.password)
-                        .then(result=>{
-                            if(result){
-                                res.json({
-                                    message: "Success",
-                                    data: {
-                                        user: user
-                                    }
-                                });
-                            }else{
-                                res.json({
-                                    message: "Fail",
-                                });
-                            }  
-                        })
-                }else{
-                    res.json({
-                        message: "Fail",
-                    });
-                }
+    login = (req, res, next) => {
+        console.log('login: ' + req.user)
+        try {
+            const accessToken = signAccessToken(req.user.id);
+            const refreshToken = signRefreshToken(req.user._id);
+
+            res.status(200).json({
+                success: true,
+                accessToken,
+                refreshToken
+            });
+        } catch (error) {
+            console.log(error)
+            return next(createError.InternalServerError('Server error'))
+        }
+
+    }
+
+    getUsers = (req, res, next) => {
+        User.find({}).lean()
+            .then((users)=>{
+                res.json(users);
             })
-            .catch(err=>console.log(err));
     }
 }
 
