@@ -6,20 +6,20 @@ const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 
 exports.signAccessToken = (id) => {
-    return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRATION,
+    return jwt.sign({ id }, 'secret-key-for-access_token-abcd', {
+        expiresIn: '15m',
     });
 };
 
 exports.signRefreshToken = (id) => {
-    return jwt.sign({ id }, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
+    return jwt.sign({ id }, 'secret-key-for-refresh_token-abc', {
+        expiresIn: '90d',
     });
 };
 
 exports.verifyRefreshToken = (token) => {
     return new Promise((resolve, reject) => {
-        jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+        jwt.verify(token, 'secret-key-for-refresh_token-abc', (err, decoded) => {
             if (err) {
                 return reject(createError.Unauthorized('Wrong token'));
             }
