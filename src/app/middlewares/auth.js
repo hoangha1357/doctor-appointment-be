@@ -1,11 +1,12 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('./../app/models/User');
+const User = require('../models/User');
 const createError = require('http-errors');
 const localConfig = {
     usernameField: 'username',
     passwordField: 'password',
 };
+
 passport.use(
     new LocalStrategy(localConfig, async (username, password, done) => {
         try {

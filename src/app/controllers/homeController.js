@@ -58,12 +58,6 @@ class HomeController {
 
     }
 
-    getUsers = (req, res, next) => {
-        User.find({}).lean()
-            .then((users)=>{
-                res.json(users);
-            })
-    }
 }
 
 module.exports = new HomeController();

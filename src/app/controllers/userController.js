@@ -9,7 +9,7 @@ class UserController {
             })
     }
 
-    getUserById(req, res, next) {
+    getUserById = (req, res, next) => {
         User.findOne({_id: req.params.id})
             .then(user=>{
                 res.json({
@@ -23,7 +23,7 @@ class UserController {
             }).catch(next)
     }
 
-    updateUser(req, res, next) {
+    updateUser = (req, res, next) => {
         User.findOneAndUpdate({_id: req.params.id}, {$set: {name: req.body.name, pnum: req.body.pnum, email: req.body.email, address: req.body.address, birthDate: Date(req.body.birthDate)}})
             .then(()=>{
                 res.json({
