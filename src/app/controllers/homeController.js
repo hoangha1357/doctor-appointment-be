@@ -55,7 +55,6 @@ class HomeController {
             console.log(error)
             return next(createError.InternalServerError('Server error'))
         }
-
     }
 
 }
