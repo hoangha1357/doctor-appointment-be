@@ -9,10 +9,7 @@ const auth = require('../app/middlewares/auth');
 router.get('/', (req, res) => {
     res.send("DR apt api");
 });
-const passport = require('passport');
-const auth = require('./../middleware/auth')
 
-router.get('/', HomeController.getUsers);
 router.post('/register', HomeController.register);
 router.post(
     '/login', 
