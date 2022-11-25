@@ -38,7 +38,7 @@ class FeedbackController {
     }
   }
 
-  async getAllFeedback(_req, res, _next) {
+  async getAllFeedbacks(_req, res, _next) {
     try {
       const feedbacks = await Feedback.find({});
       console.log(feedbacks);
