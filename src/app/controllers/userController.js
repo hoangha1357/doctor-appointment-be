@@ -1,5 +1,5 @@
 const User = require('../models/User');
-
+const DoctorProfile = require('../models/DoctorProfile');
 class UserController {
 
     getUsers(req, res, next) {
@@ -11,16 +11,31 @@ class UserController {
 
     getUserById = (req, res, next) => {
         User.findOne({_id: req.params.id})
-            .then(user=>{
-                res.json({
+            .then(async (user) => {
+                let resObj = {
                     name: user.name,
                     type: user.type,
                     pnum: user.pnum,
                     email: user.email,
                     address: user.address,
                     birthDate: user.birthDate
+                };
+                if(user?.type == "Doctor"){
+                    const profile = await DoctorProfile.findOne({doctorId: user._id});
+                    resObj = {
+                        ...resObj,
+                        major: profile.major,
+                        certificate: profile.certificate
+                    };
+                }
+                res.status(200).json(resObj);
+                
+            }).catch(err =>{
+                res.json({
+                    message: "User not found"
                 });
-            }).catch(next)
+                console.log(err);
+            })
     }
 
     updateUser = (req, res, next) => {
@@ -28,13 +43,13 @@ class UserController {
             .then(()=>{
                 res.json({
                     message: "update success"
-                })
+                });
             })
             .catch(err => {
                 res.json({
                     message: "update fail"
                 })
-                console.log(err)
+                console.log(err);
             })
     }
 }
