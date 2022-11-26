@@ -23,6 +23,7 @@ router.post('/appointment/create', auth.Authorization , AppointmentController.ap
 router.patch('/appointment/:id', auth.Authorization , AppointmentController.editAppointment)
 router.delete('/appointment/:id', auth.Authorization , AppointmentController.cancelAppointment)
 router.get('/appointment/getAppointment', auth.Authorization, AppointmentController.getAllAppointment)
+router.patch('/appointment/:id/aprove', auth.AuthorizationDoctor, AppointmentController.aproveAppointment)
 
 //user api
 router.get("/user", auth.Authorization ,UserController.getUsers);

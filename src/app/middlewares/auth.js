@@ -68,3 +68,17 @@ exports.Authorization = (req, res, next) => {
 }
 
 
+exports.AuthorizationDoctor = (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, (err, user, info) => {
+        if (err || !user) {
+            return next(createError.Unauthorized(info?.message ? info.message : "User is not authorized"));
+        } else if (user.type != "Doctor") {
+            return next(createError.Unauthorized(info?.message ? info.message : "You are not the doctor"));
+        } else {
+            req.user = user;
+            next();
+        }
+    })(req, res, next);
+}
+
+
