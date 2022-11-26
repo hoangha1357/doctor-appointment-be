@@ -18,6 +18,11 @@ router.post(
   HomeController.login,
 );
 
+router.post('/appointment/create', auth.Authorization , AppointmentController.appointment)
+router.patch('/appointment/:id', auth.Authorization , AppointmentController.editAppointment)
+router.delete('/appointment/:id', auth.Authorization , AppointmentController.cancelAppointment)
+router.get('/appointment/getAppointment', auth.Authorization, AppointmentController.getAllAppointment)
+
 //user api
 router.get("/user", UserController.getUsers);
 router.get("/user/:id", UserController.getUserById);

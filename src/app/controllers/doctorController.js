@@ -2,6 +2,7 @@ const User = require('../models/User');
 const DoctorProfile = require('../models/DoctorProfile');
 class DoctorController {
 
+
     async updateProfile(req, res, next){
         const {doctorid ,major, certificate } = req.body;
         try {
