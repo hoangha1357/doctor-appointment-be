@@ -13,7 +13,7 @@ class DoctorController {
                 }else{
                     let doctor = await User.findOne({_id: doctorid});
                     if(doctor?.type == "Doctor"){
-                        DoctorProfile.findByIdAndUpdate({doctorId: doctorid}, {$set:{certificate: certificate, major : major}});
+                        await DoctorProfile.findByIdAndUpdate({doctorId: doctorid}, {$set:{certificate: certificate, major : major}});
                     }else{
                         console.log(doctor);
                         throw new Error("User is not a Doctor"); 
