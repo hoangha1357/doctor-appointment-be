@@ -4,6 +4,7 @@
 
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
+const KEY = require('./../const');
 
 exports.signAccessToken = (id) => {
     return jwt.sign({ id }, 'secret-key-for-access_token-abcd', {

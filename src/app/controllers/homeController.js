@@ -41,7 +41,6 @@ class HomeController {
     }
 
     login = (req, res, next) => {
-        console.log('login: ' + req.user)
         try {
             const accessToken = signAccessToken(req.user.id);
             const refreshToken = signRefreshToken(req.user._id);
