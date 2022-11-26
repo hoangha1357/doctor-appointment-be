@@ -5,15 +5,16 @@ class DoctorController {
 
     async updateProfile(req, res, next){
         const {doctorid ,major, certificate } = req.body;
+        const {id} = req.user;
         try {
             if(major && certificate){
-                let drProfile = await DoctorProfile.findOne({doctorId : doctorid});
+                let drProfile = await DoctorProfile.findOne({doctorId : id});
                 if(drProfile){
-                    await DoctorProfile.findOneAndUpdate({doctorId: drProfile.doctorId},{$set: {major : major, certificate : certificate}});
+                    await DoctorProfile.findOneAndUpdate({doctorId: id},{$set: {major : major, certificate : certificate}});
                 }else{
-                    let doctor = await User.findOne({_id: doctorid});
+                    let doctor = await User.findOne({_id: id});
                     if(doctor?.type === "Doctor"){
-                        const newDrProfile = new DoctorProfile({doctorId: doctorid, certificate: certificate, major : major});
+                        const newDrProfile = new DoctorProfile({doctorId: id, certificate: certificate, major : major});
                         newDrProfile.save();
                     }else{
                         console.log(doctor);
@@ -59,7 +60,7 @@ class DoctorController {
                 let resObj=[];
                 for(let drProf of drProfiles){
                     const dr = {
-                        id: user._id,
+                        id: drProf._id,
                         name: drProf.doctorId.name,
                         pnum: drProf.doctorId.pnum,
                         email: drProf.doctorId.email, 
