@@ -25,7 +25,7 @@ app.use(express.json());
 
 app.use(route);
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
     console.log(`Doctor appointment app listening at http://localhost:${port}`);
 });
 
