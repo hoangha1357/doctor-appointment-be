@@ -8,7 +8,7 @@ const KEY = require('./../const');
 
 exports.signAccessToken = (id) => {
     return jwt.sign({ id }, 'secret-key-for-access_token-abcd', {
-        expiresIn: '15m',
+        expiresIn: '1h',
     });
 };
 
