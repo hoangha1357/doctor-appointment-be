@@ -4,6 +4,7 @@ const HomeController = require("../app/controllers/homeController");
 const UserController = require("../app/controllers/userController");
 const DoctorController = require("../app/controllers/doctorController");
 const FeedbackController = require("../app/controllers/feedBackcontroller.js");
+const AppointmentController = require("../app/controllers/appointmentController");
 const passport = require("passport");
 const auth = require("../app/middlewares/auth");
 
@@ -24,14 +25,14 @@ router.delete('/appointment/:id', auth.Authorization , AppointmentController.can
 router.get('/appointment/getAppointment', auth.Authorization, AppointmentController.getAllAppointment)
 
 //user api
-router.get("/user", UserController.getUsers);
-router.get("/user/:id", UserController.getUserById);
-router.post("/user/:id/update", UserController.updateUser);
+router.get("/user", auth.Authorization ,UserController.getUsers);
+router.get("/user/:id", auth.Authorization , UserController.getUserById);
+router.post("/user/:id/update", auth.Authorization , UserController.updateUser);
 
 //doctor api
-router.get("/doctor/search", DoctorController.getDoctorsByName);
-router.get("/doctor/search/major", DoctorController.getDoctorsByMajor);
-router.post("/doctor/profile", DoctorController.updateProfile);
+router.get("/doctor/search", auth.Authorization ,DoctorController.getDoctorsByName);
+router.get("/doctor/search/major", auth.Authorization ,DoctorController.getDoctorsByMajor);
+router.post("/doctor/profile", auth.Authorization ,DoctorController.updateProfile);
 
 //feedback ap
 router.route("/feedbacks")
