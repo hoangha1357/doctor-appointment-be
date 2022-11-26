@@ -12,9 +12,8 @@ class DoctorController {
                     await DoctorProfile.findOneAndUpdate({doctorId: drProfile.doctorId},{$set: {major : major, certificate : certificate}});
                 }else{
                     let doctor = await User.findOne({_id: doctorid});
-                    if(doctor?.type === "Doctor"){
-                        const newDrProfile = new DoctorProfile({doctorId: doctorid, certificate: certificate, major : major});
-                        newDrProfile.save();
+                    if(doctor?.type == "Doctor"){
+                        DoctorProfile.findByIdAndUpdate({doctorId: doctorid}, {$set:{certificate: certificate, major : major}});
                     }else{
                         console.log(doctor);
                         throw new Error("User is not a Doctor"); 

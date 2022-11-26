@@ -69,7 +69,7 @@ class AppointmentController {
                                 data: {
                                     appointment: null
                                 },
-                                message: "You are not manage this appointment"
+                                message: "You do not manage this appointment"
                             })
                         }
                         res.status(200).json({
